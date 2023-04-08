@@ -47,8 +47,7 @@ class ltDAO
             return [];
         }
     }
-
-    static async addlist(title,sev,adddate,lastupdate)
+    static async addlist(title,sev,adddate,luY,luM,luD,hidden)
     {
         try
         {
@@ -57,7 +56,10 @@ class ltDAO
                 title : title,
                 sev  : sev,
                 adddate : adddate,
-                lastupdate : lastupdate
+                luY:luY,
+                luM:luM,
+                luD:luD,
+                hidden : hidden
             }
 
             return await lttodo.insertOne(todoDoc);
@@ -68,6 +70,48 @@ class ltDAO
             return { error : e};
         }
     }
+
+    static async deletetodo(id)
+    {
+        try
+        {   
+            const deleteResponse = await lttodo.deleteOne({ _id : new ObjectId(id)});
+            return deleteResponse;
+        }
+        catch(e)
+        {
+            console.error(`Unable to delete review: ${e}`);
+            return { error : e};
+        }
+    }
+
+    static async hidetodo(id,luY,luM,luD,ishidden)
+    {
+        try
+        {
+            const updateResponse = await lttodo.updateOne({ _id : new ObjectId(id)},{$set : {hidden: ishidden,luY:luY,luM:luM,luD:luD}});
+            return updateResponse;
+        }
+        catch(e)
+        {
+            console.error(`Unable to update review: ${e}`);
+            return { error : e};
+        }
+    }
+    static async unhideALL(filter)
+    {
+        try
+        {
+            const updateResponse = await lttodo.updateMany(filter,{$set : {hidden: false}});
+            return updateResponse;
+        }
+        catch(e)
+        {
+            console.error(`Unable to update review: ${e}`);
+            return { error : e};
+        }
+    }
+    
 
 }
 

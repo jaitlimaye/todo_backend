@@ -11,8 +11,8 @@ router.route('/daily')
 router.route('/longterm')
     .get(longterm.apiGetAll)
    .post(longterm.apiPostNew)
- /*    .delete(longterm.apiDelete)
+    .delete(longterm.apiDelete)
+    .put(longterm.apihide)
 
-router.route('/longterm/:id').put(longterm.apiupdate)
-*/
+ router.route('/longterm/update').put(longterm.batchupdate)
 module.exports = router
