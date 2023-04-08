@@ -3,22 +3,22 @@ mongodb = require("mongodb")
 
 const ObjectId = mongodb.ObjectId;
 
-let dailytodo;
+let lttodo;
 
-class dailyDAO
+class ltDAO
 {
     static async injectDB(conn)
     {
-        if(dailytodo)
+        if(lttodo)
         {
             return;
         }
         try{
-            dailytodo = await conn.db(process.env.REV_NS).collection("daily")
+            lttodo = await conn.db(process.env.REV_NS).collection("lt")
         }catch(err)
         {
             console.error(
-                `Unable to establish a collection handle in /api/dao/dailyDAO.js: ${err}`,
+                `Unable to establish a collection handle in /api/dao/ltDAO.js: ${err}`,
             )
         }
     } 
@@ -28,7 +28,7 @@ class dailyDAO
         let cursor;
         try
         {
-            cursor= await dailytodo.find()
+            cursor= await lttodo.find()
         }
         catch(err)
         {
@@ -48,7 +48,7 @@ class dailyDAO
         }
     }
 
-    static async addlist(title,sev,date)
+    static async addlist(title,sev,adddate,lastupdate)
     {
         try
         {
@@ -56,10 +56,11 @@ class dailyDAO
             {
                 title : title,
                 sev  : sev,
-                date : date
+                adddate : adddate,
+                lastupdate : lastupdate
             }
 
-            return await dailytodo.insertOne(todoDoc);
+            return await lttodo.insertOne(todoDoc);
         }
         catch(e)
         {
@@ -68,19 +69,6 @@ class dailyDAO
         }
     }
 
-    static async deletetodo(id)
-    {
-        try
-        {
-            const deleteResponse = await dailytodo.deleteOne({ _id : new ObjectId(id)});
-            return deleteResponse;
-        }
-        catch(e)
-        {
-            console.error(`Unable to delete review: ${e}`);
-            return { error : e};
-        }
-    }
 }
 
-module.exports = dailyDAO
+module.exports = ltDAO

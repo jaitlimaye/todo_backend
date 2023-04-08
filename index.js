@@ -5,7 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const dailyDAO = require("./api/dao/dailyDAO.js");
+const dailyDAO = require("./api/DAO/dailyDAO.js");
+const ltDAO = require("./api/DAO/ltDAO.js")
 const router = require("./api/routes.js")
 
 const dotenv = require("dotenv");
@@ -32,6 +33,7 @@ Mongodb_Client.connect(
 })
 .then(async client => {
     await dailyDAO.injectDB(client);
+    await ltDAO.injectDB(client);
     app.listen(port,() => {
         console.log(`listening on port ${port}`)
     }

@@ -1,4 +1,4 @@
-const dailyDAO = require("./dao/dailyDAO");
+const dailyDAO = require("./DAO/dailyDAO");
 
 class daily
 {
